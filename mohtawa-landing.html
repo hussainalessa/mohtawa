@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohtawa — Book your free consultation</title>
+<link rel="icon" type="image/png" href="assets/logos/mohtawa-mark-azure.png">
+
+<style>
+  /* ============================================================
+     Mohtawa design tokens (from the Mohtawa Design System)
+     ============================================================ */
+  :root {
+    /* Brand palette */
+    --azure: #29abe0; --dark-blue: #003d68; --light-blue: #d2dcf1;
+    --light-gray: #b3b3b3; --vivid-red: #ff4a3c; --orange: #ee9d6a; --white: #ffffff;
+
+    /* Azure scale */
+    --azure-50:#eaf7fc; --azure-100:#d4eefa; --azure-200:#a6e0f5; --azure-300:#6ecbed;
+    --azure-400:#29abe0; --azure-500:#1f95c6; --azure-600:#1879a3; --azure-700:#145f80;
+
+    /* Dark blue scale */
+    --blue-900:#002844; --blue-800:#003154; --blue-700:#003d68; --blue-600:#0a527f; --blue-500:#1f6c9c;
+
+    /* Neutral / gray scale */
+    --gray-0:#ffffff; --gray-50:#f7f8fa; --gray-100:#eef0f3; --gray-200:#e1e4e9;
+    --gray-300:#cdd2d9; --gray-400:#b3b3b3; --gray-500:#8c9097; --gray-600:#686c73;
+    --gray-700:#4a4e54; --gray-800:#2f3338; --gray-900:#1a1d21;
+
+    /* Accent scales */
+    --red-400:#ff6b5f; --red-500:#ff4a3c; --red-600:#e23323;
+    --orange-300:#f4b78f; --orange-400:#ee9d6a; --orange-500:#e07f44;
+
+    /* Semantic — surfaces */
+    --surface-page:var(--gray-50); --surface-card:var(--white); --surface-raised:var(--white);
+    --surface-sunken:var(--gray-100); --surface-inverse:var(--blue-700); --surface-tint:var(--light-blue);
+
+    /* Semantic — text */
+    --text-strong:var(--blue-700); --text-body:var(--gray-800); --text-muted:var(--gray-600);
+    --text-subtle:var(--gray-500); --text-on-dark:var(--white); --text-link:var(--azure-500);
+
+    /* Semantic — brand / accent */
+    --brand-primary:var(--azure-400); --brand-deep:var(--blue-700); --brand-tint:var(--light-blue);
+    --accent:var(--red-500); --accent-hover:var(--red-600); --accent-soft:var(--orange-400);
+
+    /* Lines & borders */
+    --border-subtle:var(--gray-200); --border-default:var(--gray-300);
+    --border-strong:var(--gray-400); --border-brand:var(--azure-400);
+    --focus-ring: color-mix(in srgb, var(--azure-400) 55%, transparent);
+
+    /* Typography */
+    --font-sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --fw-thin:100; --fw-light:300; --fw-regular:400; --fw-medium:500;
+    --fw-semibold:600; --fw-bold:700; --fw-extrabold:800; --fw-black:900;
+    --fs-body-lg:1.125rem; --fs-body:1rem; --fs-body-sm:0.889rem;
+    --fs-caption:0.79rem; --fs-overline:0.703rem;
+    --ls-display:-0.015em; --ls-overline:0.18em;
+
+    /* Radius */
+    --radius-xs:6px; --radius-sm:10px; --radius-md:16px; --radius-lg:24px;
+    --radius-xl:32px; --radius-pill:999px; --radius-round:50%;
+
+    /* Shadows — soft, blue-tinted */
+    --shadow-xs:0 1px 2px rgba(0,61,104,0.06);
+    --shadow-sm:0 2px 8px rgba(0,61,104,0.08);
+    --shadow-md:0 8px 24px rgba(0,61,104,0.10);
+    --shadow-lg:0 18px 48px rgba(0,61,104,0.14);
+    --shadow-azure:0 10px 30px rgba(41,171,224,0.28);
+    --shadow-accent:0 10px 26px rgba(255,74,60,0.26);
+
+    /* Motion */
+    --ease-standard:cubic-bezier(0.4,0,0.2,1);
+    --ease-out:cubic-bezier(0.22,1,0.36,1);
+    --dur-fast:140ms; --dur-base:220ms; --dur-slow:360ms;
+  }
+
+  @font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('assets/fonts/Outfit-Variable.woff2') format('woff2');
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  html, body { margin: 0; padding: 0; background: var(--gray-100); font-family: var(--font-sans);
+    color: var(--text-body); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  h1, h2, h3, p { margin: 0; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--azure-200); color: var(--blue-700); }
+  :focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ---- page shell: gray backdrop with the mobile column centered ---- */
+  .backdrop {
+    min-height: 100vh;
+    display: flex; justify-content: center;
+    background:
+      radial-gradient(80% 50% at 50% 0%, color-mix(in srgb, var(--azure-400) 9%, transparent), transparent 70%),
+      var(--gray-100);
+    padding: 0;
+  }
+  .phone {
+    width: 100%; max-width: 440px;
+    background: var(--surface-card);
+    min-height: 100vh;
+    box-shadow: 0 0 80px -20px rgba(0,61,104,0.22);
+    position: relative;
+    overflow-x: clip;
+  }
+  @media (min-width: 480px) {
+    .backdrop { padding: 28px 0; }
+    .phone { border-radius: 28px; min-height: auto; overflow: hidden; }
+  }
+
+  .eyebrow { font-weight: 700; letter-spacing: var(--ls-overline); text-transform: uppercase;
+    font-size: 12px; color: var(--azure-600); }
+
+  /* hide scrollbars on horizontal rails */
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  /* ---- header ---- */
+  .site-header {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(255,255,255,0.86);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .site-header__inner { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; }
+  .site-header__logo { height: 26px; width: auto; }
+
+  /* ---- buttons (design-system Button) ---- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-sans); font-weight: var(--fw-semibold);
+    line-height: 1; letter-spacing: 0.01em; border: 1px solid transparent;
+    border-radius: var(--radius-md); cursor: pointer;
+    transition: transform var(--dur-fast) var(--ease-standard),
+      filter var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+  }
+  .btn--pill { border-radius: var(--radius-pill); }
+  .btn--block { display: flex; width: 100%; }
+  .btn--sm { padding: 8px 16px; font-size: var(--fs-body-sm); gap: 6px; min-height: 36px; }
+  .btn--md { padding: 11px 22px; font-size: var(--fs-body); gap: 8px; min-height: 44px; }
+  .btn--lg { padding: 15px 30px; font-size: var(--fs-body-lg); gap: 10px; min-height: 54px; }
+  .btn--accent { background: var(--accent); color: #fff; box-shadow: var(--shadow-accent); }
+  .btn:not([disabled]):hover { filter: brightness(1.06); }
+  .btn:not([disabled]):active { transform: translateY(1px) scale(0.99); }
+  .btn[disabled] { cursor: not-allowed; opacity: 0.5; }
+
+  /* ---- field labels / inputs (design-system Input & Select) ---- */
+  .field { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-sans); }
+  .field__label { font-size: var(--fs-body-sm); font-weight: var(--fw-semibold); color: var(--text-strong); }
+  .field__control {
+    width: 100%; box-sizing: border-box; min-height: 46px;
+    font-family: var(--font-sans); font-size: var(--fs-body); color: var(--text-body);
+    background: var(--surface-card); border: 1.5px solid var(--border-default);
+    border-radius: var(--radius-md); outline: none;
+    transition: border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+  }
+  input.field__control { padding: 12px 14px; font-weight: var(--fw-regular); }
+  select.field__control { padding: 12px 40px 12px 14px; font-weight: var(--fw-medium);
+    appearance: none; -webkit-appearance: none; cursor: pointer; }
+  .field__control:focus { border-color: var(--azure-400); box-shadow: 0 0 0 4px var(--focus-ring); }
+  .field__select-wrap { position: relative; display: flex; align-items: center; }
+  .field__chevron { position: absolute; right: 13px; pointer-events: none; color: var(--text-muted); }
+
+  /* ---- sections ---- */
+  section, footer { position: relative; }
+
+  /* hero */
+  .hero { position: relative; overflow: hidden; background: var(--surface-card); }
+  .hero__pattern {
+    position: absolute; width: 240px; height: 240px; top: -6%; right: -4%;
+    background: url('assets/patterns/capsule-scatter-color.svg') no-repeat; background-size: contain;
+    opacity: 0.9; pointer-events: none;
+  }
+  .hero__inner { position: relative; }
+  .hero__copy { padding: 34px 22px 16px; }
+  .hero__chip {
+    display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 999px;
+    background: var(--azure-50); color: var(--azure-600); font-weight: 700; font-size: 12.5px; letter-spacing: .02em;
+  }
+  .hero__title { font-size: 38px; font-weight: 900; line-height: 1.04; letter-spacing: -0.03em;
+    color: var(--text-strong); margin: 18px 0 0; }
+  .hero__title .accent { color: var(--azure-400); }
+  .hero__lede { font-size: 17px; color: var(--text-muted); line-height: 1.55; margin: 18px 0 26px; max-width: 380px; }
+  .hero__trust { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px;
+    font-size: 13px; color: var(--text-subtle); font-weight: 500; }
+  .hero__trust span.item { display: flex; align-items: center; gap: 5px; }
+  .hero__trust .sep { width: 3px; height: 3px; border-radius: 9px; background: var(--gray-300); }
+  .hero__photo-wrap { padding: 12px 22px 30px; }
+  .hero__photo { position: relative; width: 100%; aspect-ratio: 4 / 3.4; border-radius: var(--radius-xl);
+    overflow: hidden; box-shadow: var(--shadow-lg); }
+  .hero__photo img { width: 100%; height: 100%; object-fit: cover; }
+  .hero__scrim { position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgba(0,61,104,0.7) 100%); }
+  .hero__card { position: absolute; left: 16px; right: 16px; bottom: 16px;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+  .hero__card-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--light-blue);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .hero__card-title { font-weight: 800; color: var(--blue-700); font-size: 14.5px; }
+  .hero__card-sub { color: var(--text-muted); font-size: 13px; }
+
+  /* client logos */
+  .logos { padding: 26px 22px; background: var(--surface-page);
+    border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+  .logos__title { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--text-subtle); margin-bottom: 18px; }
+  .logos__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 10px;
+    align-items: center; justify-items: center; }
+  .logos__grid span { font-size: 19px; font-weight: 800; color: var(--gray-400); letter-spacing: -0.01em; }
+
+  /* services */
+  .services { padding: 52px 22px; background: var(--surface-card); }
+  .section-head--center { text-align: center; margin-bottom: 28px; }
+  .section-title { font-size: 28px; font-weight: 900; color: var(--text-strong);
+    letter-spacing: -0.025em; margin-top: 10px; line-height: 1.1; }
+  .card-stack { display: flex; flex-direction: column; gap: 14px; }
+  .service-card { background: var(--surface-card); border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm); }
+  .service-card__head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+  .service-card__icon { width: 52px; height: 52px; border-radius: 16px; background: var(--light-blue);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .service-card__title { font-size: 20px; font-weight: 800; color: var(--text-strong); letter-spacing: -0.01em; }
+  .service-card__desc { font-size: 15.5px; color: var(--text-muted); line-height: 1.55; margin: 0 0 14px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 13px; font-weight: 600; color: var(--azure-700); background: var(--azure-50);
+    padding: 5px 12px; border-radius: 999px; }
+
+  /* why us */
+  .why { padding: 52px 22px; background: var(--surface-page); }
+  .section-head--left { margin-bottom: 26px; }
+  .why__list { display: flex; flex-direction: column; gap: 18px; }
+  .why__item { display: flex; gap: 14px; align-items: flex-start; }
+  .why__icon { width: 46px; height: 46px; border-radius: 14px; background: var(--surface-card);
+    border: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .why__title { font-size: 17px; font-weight: 800; color: var(--text-strong); margin-bottom: 4px; }
+  .why__desc { font-size: 15px; color: var(--text-muted); line-height: 1.5; }
+
+  /* testimonials */
+  .testimonials { padding: 52px 0; background: var(--surface-card); }
+  .testimonials__head { padding: 0 22px; margin-bottom: 22px; }
+  .testimonials__rail { display: flex; gap: 14px; overflow-x: auto; padding: 4px 22px 8px;
+    scroll-snap-type: x mandatory; }
+  .testimonial { flex: 0 0 84%; scroll-snap-align: center; background: var(--surface-page);
+    border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow-sm); }
+  .testimonial__stars { display: flex; gap: 3px; margin-bottom: 12px; }
+  .testimonial__quote { font-size: 15.5px; color: var(--text-body); line-height: 1.6; margin: 0 0 18px; font-weight: 500; }
+  .testimonial__who { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 42px; height: 42px; flex-shrink: 0; border-radius: var(--radius-round); overflow: hidden;
+    display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-sans);
+    font-weight: var(--fw-bold); font-size: 17px; color: var(--blue-700); background: var(--light-blue);
+    border: 2px solid var(--surface-card); box-shadow: var(--shadow-xs); }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .testimonial__name { font-weight: 800; color: var(--text-strong); font-size: 14.5px; }
+  .testimonial__role { color: var(--text-subtle); font-size: 13px; }
+
+  /* faq */
+  .faq { padding: 52px 22px; background: var(--surface-page); }
+  .faq__list { display: flex; flex-direction: column; gap: 10px; }
+  .faq__item { background: var(--surface-card); border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md); overflow: hidden; }
+  .faq__q { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 16px 18px; background: none; border: none; cursor: pointer; text-align: left; font-family: var(--font-sans); }
+  .faq__q-text { font-size: 15.5px; font-weight: 700; color: var(--text-strong); }
+  .faq__toggle { flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px; background: var(--gray-100);
+    display: flex; align-items: center; justify-content: center; transition: background .15s; }
+  .faq__item.is-open .faq__toggle { background: var(--azure-400); }
+  .faq__a { padding: 0 18px 18px; font-size: 14.5px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+  /* booking */
+  .booking { padding: 52px 22px 60px; background: var(--surface-page); }
+  .booking__head { text-align: center; margin-bottom: 26px; }
+  .booking__title { font-size: 30px; font-weight: 900; color: var(--text-strong);
+    letter-spacing: -0.025em; margin-top: 10px; line-height: 1.08; }
+  .booking__lede { color: var(--text-muted); font-size: 16px; margin-top: 12px; line-height: 1.5; }
+  .booking__card { background: var(--surface-card); border-radius: var(--radius-xl); padding: 22px;
+    box-shadow: var(--shadow-md); border: 1px solid var(--border-subtle); }
+  .booking__row-label { display: flex; align-items: center; gap: 8px; }
+  .booking__row-label span.t { font-weight: 700; font-size: 14px; color: var(--text-strong); }
+  .booking__tz { font-size: 12px; color: var(--text-subtle); margin-left: auto; }
+  .date-rail { display: flex; gap: 9px; overflow-x: auto; padding-bottom: 4px; margin: 0 -2px; }
+  .date-chip { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    width: 62px; padding: 12px 0; border-radius: 16px; cursor: pointer; user-select: none;
+    border: 1.5px solid var(--border-subtle); background: var(--surface-card); color: var(--text-muted);
+    transition: all .15s ease; }
+  .date-chip.is-sel { border-color: var(--azure-400); background: var(--light-blue); color: var(--blue-700); }
+  .date-chip .wd { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  .date-chip .dd { font-size: 20px; font-weight: 800; line-height: 1; }
+  .date-chip .mo { font-size: 11px; }
+  .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+  .time-slot { padding: 12px 0; border-radius: 12px; text-align: center; cursor: pointer; font-size: 15px;
+    font-weight: 600; user-select: none; border: 1.5px solid var(--border-subtle);
+    background: var(--surface-card); color: var(--text-body); transition: all .15s ease; }
+  .time-slot.is-sel { border-color: var(--azure-400); background: var(--light-blue); color: var(--blue-700); }
+  .booking__divider { height: 1px; background: var(--border-subtle); margin: 24px 0 20px; }
+  .booking__fields { display: flex; flex-direction: column; gap: 14px; }
+  .booking__fineprint { text-align: center; font-size: 12.5px; color: var(--text-subtle); margin-top: 12px;
+    display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+  /* booking — confirmation state */
+  .booked { background: var(--surface-card); border-radius: var(--radius-xl); padding: 40px 26px;
+    text-align: center; box-shadow: var(--shadow-md); border: 1px solid var(--border-subtle); }
+  .booked__check { width: 68px; height: 68px; border-radius: 50%; background: var(--azure-50);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+  .booked__title { font-size: 26px; font-weight: 900; color: var(--text-strong); letter-spacing: -0.02em; }
+  .booked__sub { color: var(--text-muted); font-size: 16px; margin-top: 8px; line-height: 1.5; }
+  .booked__sub strong { color: var(--text-body); }
+  .booked__info { margin-top: 22px; padding: 16px 18px; border-radius: 16px; background: var(--azure-50);
+    display: flex; align-items: center; gap: 14px; text-align: left; }
+  .booked__info-date { font-weight: 800; color: var(--blue-700); font-size: 16px; }
+  .booked__info-time { color: var(--text-muted); font-size: 14px; }
+  .booked__again { margin-top: 22px; background: none; border: none; color: var(--azure-600);
+    font-weight: 600; font-size: 15px; cursor: pointer; font-family: var(--font-sans); }
+
+  /* footer */
+  .site-footer { background: var(--blue-900); color: rgba(255,255,255,0.7); padding: 40px 22px 32px; overflow: hidden; }
+  /* single-tint azure capsule pattern — guideline treatment for dark panels */
+  .site-footer__pattern { position: absolute; top: -28px; right: -28px; width: 230px; height: 230px;
+    background: url('assets/patterns/capsule-scatter-azure.svg') no-repeat; background-size: contain;
+    opacity: 0.5; pointer-events: none; }
+  .site-footer > *:not(.site-footer__pattern) { position: relative; z-index: 1; }
+  .site-footer__logo { height: 26px; margin-bottom: 16px; }
+  .site-footer__blurb { font-size: 14px; line-height: 1.65; max-width: 300px; margin: 0 0 22px; }
+  .site-footer__contact { display: flex; flex-direction: column; gap: 11px; font-size: 14.5px; }
+  .site-footer__contact a, .site-footer__contact span { display: flex; align-items: center; gap: 10px;
+    color: rgba(255,255,255,0.85); text-decoration: none; }
+  .site-footer__bottom { border-top: 1px solid rgba(255,255,255,0.12); margin-top: 26px; padding-top: 18px;
+    display: flex; justify-content: space-between; font-size: 12.5px; color: rgba(255,255,255,0.55); }
+
+  /* sticky CTA */
+  .sticky-cta { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%) translateY(120%);
+    width: min(440px, 100%); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); z-index: 50;
+    background: linear-gradient(180deg, transparent, var(--surface-card) 32%);
+    transition: transform .28s var(--ease-out); pointer-events: none; }
+  .sticky-cta.is-shown { transform: translateX(-50%) translateY(0); pointer-events: auto; }
+
+  /* ============================================================
+     ===== RESPONSIVE =====
+     Phone (<768px) is the untouched base above.
+     Tablet ≥768px (720px container) · Desktop ≥1024px (1120px container).
+     Later tasks append their media-query rules into this section.
+     ============================================================ */
+
+  /* anchor smooth-scroll with an offset for the sticky header */
+  html { scroll-behavior: smooth; }
+  section[id], #book { scroll-margin-top: 80px; }
+
+  /* nav links are desktop/tablet only */
+  .site-header__nav { display: none; }
+
+  @media (min-width: 768px) {
+    /* centered horizontal padding → full-bleed bands, centered content */
+    :root { --pad-x: max(22px, calc((100% - 720px) / 2)); }
+
+    /* drop the phone-card framing */
+    .backdrop { display: block; padding: 0; background: var(--surface-card); }
+    .phone { max-width: none; width: auto; min-height: 0; background: transparent;
+      box-shadow: none; border-radius: 0; overflow: visible; }
+
+    /* header becomes a nav bar; content centered to the container */
+    .site-header__inner { max-width: 1120px; margin: 0 auto; }
+    .site-header__nav { display: flex; align-items: center; gap: 26px; margin-left: auto; margin-right: 28px; }
+    .site-header__nav a { font-size: 15px; font-weight: 600; color: var(--text-muted); }
+    .site-header__nav a:hover { color: var(--azure-600); }
+
+    /* center content of the simple bands (hero/testimonials/booking/footer
+       are handled in their own tasks) */
+    .logos, .services, .why, .faq {
+      padding-left: var(--pad-x); padding-right: var(--pad-x);
+    }
+
+    /* sticky bottom CTA is a mobile-only pattern */
+    .sticky-cta { display: none; }
+  }
+
+  @media (min-width: 1024px) {
+    :root { --pad-x: max(22px, calc((100% - 1120px) / 2)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="backdrop">
+  <div class="phone">
+
+    <!-- ============== header ============== -->
+    <header class="site-header">
+      <div class="site-header__inner">
+        <img class="site-header__logo" src="assets/logos/mohtawa-logo-color.png" alt="Mohtawa">
+        <nav class="site-header__nav">
+          <a href="#services">Services</a>
+          <a href="#why">Why us</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <button class="btn btn--accent btn--sm btn--pill" data-scroll-book style="white-space:nowrap;">Book a call</button>
+      </div>
+    </header>
+
+    <!-- ============== hero ============== -->
+    <section class="hero">
+      <div class="hero__pattern" aria-hidden="true"></div>
+      <div class="hero__inner">
+        <div class="hero__copy">
+          <span class="hero__chip"><i data-icon="spark" data-size="14" data-color="var(--azure-500)"></i> Digital consultancy · Kuwait</span>
+          <h1 class="hero__title">A second set of<br>expert eyes on your<br><span class="accent">content, design</span><br>&amp; development.</h1>
+          <p class="hero__lede">We help Gulf brands invest in what works and skip what doesn't — with senior guidance across every layer of your digital presence.</p>
+          <button class="btn btn--accent btn--lg btn--pill btn--block" data-scroll-book>
+            Book your free consultation <i data-icon="arrow" data-size="20"></i>
+          </button>
+          <div class="hero__trust">
+            <span class="item"><i data-icon="clock" data-size="15" data-color="var(--azure-500)"></i> 30 minutes</span>
+            <span class="sep"></span>
+            <span class="item"><i data-icon="check" data-size="15" data-color="var(--azure-500)"></i> No obligation</span>
+          </div>
+        </div>
+
+        <div class="hero__photo-wrap">
+          <div class="hero__photo">
+            <img src="assets/photography/kuwaiti-man-skyline.png" alt="Consultant in Kuwait City">
+            <div class="hero__scrim"></div>
+            <div class="hero__card">
+              <div class="hero__card-icon"><i data-icon="users" data-size="22" data-color="var(--blue-700)"></i></div>
+              <div>
+                <div class="hero__card-title">One team, end to end</div>
+                <div class="hero__card-sub">Strategy to launch, under one roof</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== client logos ============== -->
+    <section class="logos">
+      <p class="logos__title">Trusted by brands across the Gulf</p>
+      <div class="logos__grid">
+        <span>NAJM</span><span>Bayan</span><span>ORYX</span>
+        <span>Marsa</span><span>Kout</span><span>Diwan</span>
+      </div>
+    </section>
+
+    <!-- ============== services ============== -->
+    <section class="services" id="services">
+      <div class="section-head--center">
+        <span class="eyebrow">What we advise on</span>
+        <h2 class="section-title">Three disciplines,<br>one accountable partner</h2>
+      </div>
+      <div class="card-stack">
+        <div class="service-card">
+          <div class="service-card__head">
+            <div class="service-card__icon"><i data-icon="content" data-size="26" data-color="var(--blue-700)"></i></div>
+            <h3 class="service-card__title">Content &amp; strategy</h3>
+          </div>
+          <p class="service-card__desc">Messaging, editorial calendars, and SEO that earn attention — and rank.</p>
+          <div class="tags"><span class="tag">Strategy</span><span class="tag">Copy</span><span class="tag">SEO</span></div>
+        </div>
+        <div class="service-card">
+          <div class="service-card__head">
+            <div class="service-card__icon"><i data-icon="design" data-size="26" data-color="var(--blue-700)"></i></div>
+            <h3 class="service-card__title">Brand &amp; design</h3>
+          </div>
+          <p class="service-card__desc">Identity and UX direction that make your brand trusted at first glance.</p>
+          <div class="tags"><span class="tag">UX / UI</span><span class="tag">Identity</span><span class="tag">Systems</span></div>
+        </div>
+        <div class="service-card">
+          <div class="service-card__head">
+            <div class="service-card__icon"><i data-icon="dev" data-size="26" data-color="var(--blue-700)"></i></div>
+            <h3 class="service-card__title">Web &amp; development</h3>
+          </div>
+          <p class="service-card__desc">Guidance on stack, performance, and a build that holds up after launch.</p>
+          <div class="tags"><span class="tag">Architecture</span><span class="tag">Performance</span><span class="tag">CMS</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== why us ============== -->
+    <section class="why" id="why">
+      <div class="section-head--left">
+        <span class="eyebrow">Why brands choose us</span>
+        <h2 class="section-title">Advice you can act on with confidence</h2>
+      </div>
+      <div class="why__list">
+        <div class="why__item">
+          <div class="why__icon"><i data-icon="user" data-size="23" data-color="var(--azure-500)"></i></div>
+          <div>
+            <h3 class="why__title">Senior partners, not juniors</h3>
+            <p class="why__desc">You work directly with the people who've done it before — no hand-offs.</p>
+          </div>
+        </div>
+        <div class="why__item">
+          <div class="why__icon"><i data-icon="target" data-size="23" data-color="var(--azure-500)"></i></div>
+          <div>
+            <h3 class="why__title">Decisions backed by evidence</h3>
+            <p class="why__desc">Every recommendation ties back to your goals and real audience data.</p>
+          </div>
+        </div>
+        <div class="why__item">
+          <div class="why__icon"><i data-icon="users" data-size="23" data-color="var(--azure-500)"></i></div>
+          <div>
+            <h3 class="why__title">One team, end to end</h3>
+            <p class="why__desc">Content, design, and development that actually talk to each other.</p>
+          </div>
+        </div>
+        <div class="why__item">
+          <div class="why__icon"><i data-icon="pin" data-size="23" data-color="var(--azure-500)"></i></div>
+          <div>
+            <h3 class="why__title">Rooted in the Gulf</h3>
+            <p class="why__desc">We know the market, the language, and what moves a regional audience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== testimonials ============== -->
+    <section class="testimonials">
+      <div class="testimonials__head">
+        <span class="eyebrow">In their words</span>
+        <h2 class="section-title" style="text-align:left;">What clients say</h2>
+      </div>
+      <div class="testimonials__rail no-scrollbar" id="testimonials-rail"></div>
+    </section>
+
+    <!-- ============== faq ============== -->
+    <section class="faq" id="faq">
+      <div class="section-head--center">
+        <span class="eyebrow">Good to know</span>
+        <h2 class="section-title">Questions, answered</h2>
+      </div>
+      <div class="faq__list" id="faq-list"></div>
+    </section>
+
+    <!-- ============== booking ============== -->
+    <section class="booking" id="book"></section>
+
+    <!-- ============== footer ============== -->
+    <footer class="site-footer">
+      <div class="site-footer__pattern" aria-hidden="true"></div>
+      <img class="site-footer__logo" src="assets/logos/mohtawa-logo-white.png" alt="Mohtawa">
+      <p class="site-footer__blurb">A digital consultancy for Gulf brands — content, design, and development advice from one accountable team.</p>
+      <div class="site-footer__contact">
+        <a href="mailto:hussain@mohtawacm.com"><i data-icon="mail" data-size="17" data-color="var(--azure-300)"></i> hussain@mohtawacm.com</a>
+        <a href="tel:+96566068182"><i data-icon="phone" data-size="17" data-color="var(--azure-300)"></i> +965 6606 8182</a>
+        <span><i data-icon="pin" data-size="17" data-color="var(--azure-300)"></i> Kuwait City, Kuwait</span>
+      </div>
+      <div class="site-footer__bottom">
+        <span>© 2026 Mohtawa Marketing</span>
+        <span>www.mohtawa.co</span>
+      </div>
+    </footer>
+
+  </div>
+</div>
+
+<!-- sticky bottom CTA -->
+<div class="sticky-cta" id="sticky-cta">
+  <button class="btn btn--accent btn--lg btn--pill btn--block" data-scroll-book>
+    Book your free consultation <i data-icon="arrow" data-size="20"></i>
+  </button>
+</div>
+
+<script>
+/* ============================================================
+   Icons — Lucide-derived geometry (matches the prototype set)
+   ============================================================ */
+const ICON_PATHS = {
+  calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="3"/><path d="M3 10h18"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  arrow: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  star: '<path d="M11.5 2.3 14 8l6 .5-4.6 4 1.4 6-5.3-3.2L6.2 18.5l1.4-6L3 8.5 9 8z"/>',
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1 1 0 0 1 1.3 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+  users: '<path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.4-2-5-3.5-5.5"/>',
+  target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  content: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>',
+  design: '<rect width="18" height="18" x="3" y="3" rx="3"/><path d="M3 9h18"/><path d="M9 21V9"/>',
+  dev: '<path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>',
+  mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+  phone: '<path d="M13.83 19a16 16 0 0 1-7-7l1.83-1.6a2 2 0 0 0 .6-2L8.5 5.2a2 2 0 0 0-2.4-1.3l-2 .5A2 2 0 0 0 2.6 6.7 18 18 0 0 0 17.3 21.4a2 2 0 0 0 2.3-1.6l.5-2a2 2 0 0 0-1.3-2.4l-3.2-.76a2 2 0 0 0-2 .6Z"/>',
+  pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  spark: '<path d="M9.9 3.5 12 9l5.5 2.1L12 13.2 9.9 18.7 7.8 13.2 2.3 11.1 7.8 9z"/><path d="M18 3v4"/><path d="M20 5h-4"/>',
+  plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+  minus: '<path d="M5 12h14"/>',
+  user: '<circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>',
+};
+function icon(name, { size = 24, color = 'currentColor', stroke = 2, fill = 'none', style = '' } = {}) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}" stroke="${color}" `
+    + `stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round" `
+    + `style="display:block;${style}">${ICON_PATHS[name] || ''}</svg>`;
+}
+// Hydrate any <i data-icon> placeholders in static markup.
+function hydrateIcons(root = document) {
+  root.querySelectorAll('i[data-icon]').forEach((el) => {
+    el.innerHTML = icon(el.dataset.icon, {
+      size: el.dataset.size ? Number(el.dataset.size) : 24,
+      color: el.dataset.color || 'currentColor',
+      stroke: el.dataset.stroke ? Number(el.dataset.stroke) : 2,
+    });
+    el.style.display = 'inline-flex';
+  });
+}
+
+/* ============================================================
+   Smooth-scroll to the booking section
+   ============================================================ */
+function scrollToBook() {
+  const el = document.getElementById('book');
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 8, behavior: 'smooth' });
+}
+document.querySelectorAll('[data-scroll-book]').forEach((b) => b.addEventListener('click', scrollToBook));
+
+/* ============================================================
+   Testimonials
+   ============================================================ */
+(function renderTestimonials() {
+  const data = [
+    { quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.", name: "Aisha Al-Rashid", role: "Marketing Lead, Najm", img: "assets/photography/kuwaiti-man-sofa.png" },
+    { quote: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", name: "Khaled Al-Otaibi", role: "Founder, Bayan", img: "assets/photography/kuwaiti-man-cafe.png" },
+    { quote: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.", name: "Mona Al-Sabah", role: "Brand Director, Oryx", img: null },
+  ];
+  const initials = (n) => n.split(' ').filter(Boolean).slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+  const stars = [0, 1, 2, 3, 4].map(() =>
+    icon('star', { size: 16, color: 'var(--orange-400)', stroke: 0, fill: 'var(--orange-400)' })).join('');
+  document.getElementById('testimonials-rail').innerHTML = data.map((t) => `
+    <div class="testimonial">
+      <div class="testimonial__stars">${stars}</div>
+      <p class="testimonial__quote">"${t.quote}"</p>
+      <div class="testimonial__who">
+        <span class="avatar">${t.img ? `<img src="${t.img}" alt="${t.name}">` : (initials(t.name) || '•')}</span>
+        <div>
+          <div class="testimonial__name">${t.name}</div>
+          <div class="testimonial__role">${t.role}</div>
+        </div>
+      </div>
+    </div>`).join('');
+})();
+
+/* ============================================================
+   FAQ accordion
+   ============================================================ */
+(function renderFAQ() {
+  const items = [
+    { q: "Is the consultation really free?", a: "Yes — the first 30-minute call is free and there's no obligation. We use it to understand your goals and share a first read on where the biggest opportunities are." },
+    { q: "What happens on the call?", a: "We listen, ask sharp questions, and give you honest direction across content, design, and development. You'll leave with clear next steps whether or not we work together." },
+    { q: "Do you work with brands outside Kuwait?", a: "Absolutely. We're rooted in Kuwait and work with brands across the GCC, in both English and Arabic." },
+    { q: "What if I only need one service?", a: "That's fine. Many clients start with a single area — content, design, or development — and expand once they see results." },
+    { q: "How soon can we start?", a: "Most engagements kick off within one to two weeks of the consultation, depending on scope." },
+  ];
+  let open = 0;
+  const list = document.getElementById('faq-list');
+
+  function render() {
+    list.innerHTML = items.map((it, i) => {
+      const isOpen = open === i;
+      return `
+        <div class="faq__item${isOpen ? ' is-open' : ''}">
+          <button class="faq__q" data-i="${i}" aria-expanded="${isOpen}">
+            <span class="faq__q-text">${it.q}</span>
+            <span class="faq__toggle">${icon(isOpen ? 'minus' : 'plus', { size: 16, color: isOpen ? '#fff' : 'var(--text-muted)', stroke: 2.6 })}</span>
+          </button>
+          ${isOpen ? `<p class="faq__a">${it.a}</p>` : ''}
+        </div>`;
+    }).join('');
+    list.querySelectorAll('.faq__q').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const i = Number(btn.dataset.i);
+        open = open === i ? -1 : i;
+        render();
+      });
+    });
+  }
+  render();
+})();
+
+/* ============================================================
+   Booking — date + time picker + form, with confirmation state
+   ============================================================ */
+(function renderBooking() {
+  const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const MO = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const TIMES = ["09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00"];
+
+  function workingDays(count) {
+    const out = [];
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 1); // start tomorrow
+    while (out.length < count) {
+      const day = d.getDay();
+      if (day !== 5 && day !== 6) out.push(new Date(d)); // skip Fri/Sat (Kuwait weekend)
+      d.setDate(d.getDate() + 1);
+    }
+    return out;
+  }
+  const fmtTime = (t) => {
+    const [h, m] = t.split(":").map(Number);
+    const ap = h >= 12 ? "PM" : "AM";
+    const hh = h % 12 === 0 ? 12 : h % 12;
+    return `${hh}:${String(m).padStart(2, "0")} ${ap}`;
+  };
+
+  const dates = workingDays(8);
+  const TOPICS = ["Content strategy", "Brand & design direction", "Website / development", "Full digital roadmap", "Something else"];
+  const state = { date: null, time: null, name: "", email: "", phone: "", topic: TOPICS[0], sent: false };
+  const isValid = () => state.date != null && state.time != null && state.name.trim() && /\S+@\S+\.\S+/.test(state.email);
+
+  const root = document.getElementById('book');
+
+  function renderForm() {
+    root.style.padding = "52px 22px 60px";
+    root.innerHTML = `
+      <div class="booking__head">
+        <span class="eyebrow">Free · 30 minutes · No obligation</span>
+        <h2 class="booking__title">Book your free<br>consultation</h2>
+        <p class="booking__lede">Pick a time that works. We'll come prepared with a first look at your opportunities.</p>
+      </div>
+      <div class="booking__card">
+        <div class="booking__row-label" style="margin-bottom:12px;">
+          ${icon('calendar', { size: 18, color: 'var(--azure-600)' })}
+          <span class="t">Select a day</span>
+        </div>
+        <div class="date-rail no-scrollbar">
+          ${dates.map((d, i) => `
+            <div class="date-chip" data-date="${i}">
+              <span class="wd">${WD[d.getDay()]}</span>
+              <span class="dd">${d.getDate()}</span>
+              <span class="mo">${MO[d.getMonth()]}</span>
+            </div>`).join('')}
+        </div>
+        <div class="booking__row-label" style="margin:22px 0 12px;">
+          ${icon('clock', { size: 18, color: 'var(--azure-600)' })}
+          <span class="t">Select a time</span>
+          <span class="booking__tz">GMT+3 · Kuwait</span>
+        </div>
+        <div class="time-grid">
+          ${TIMES.map((t) => `<div class="time-slot" data-time="${t}">${fmtTime(t).replace(':00', '')}</div>`).join('')}
+        </div>
+        <div class="booking__divider"></div>
+        <div class="booking__fields">
+          <label class="field">
+            <span class="field__label">Full name</span>
+            <input class="field__control" type="text" name="name" placeholder="e.g. Hussain Al-Sabah" value="${state.name}">
+          </label>
+          <label class="field">
+            <span class="field__label">Work email</span>
+            <input class="field__control" type="email" name="email" placeholder="you@company.com" value="${state.email}">
+          </label>
+          <label class="field">
+            <span class="field__label">Phone / WhatsApp</span>
+            <input class="field__control" type="tel" name="phone" placeholder="+965 ..." value="${state.phone}">
+          </label>
+          <label class="field">
+            <span class="field__label">What would you like to discuss?</span>
+            <span class="field__select-wrap">
+              <select class="field__control" name="topic">
+                ${TOPICS.map((o) => `<option value="${o}"${o === state.topic ? ' selected' : ''}>${o}</option>`).join('')}
+              </select>
+              <span class="field__chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </span>
+          </label>
+        </div>
+        <div style="margin-top:22px;">
+          <button class="btn btn--accent btn--lg btn--pill btn--block" id="confirm-btn"${isValid() ? '' : ' disabled'}>
+            Confirm my consultation ${icon('arrow', { size: 20, color: '#fff' })}
+          </button>
+          <p class="booking__fineprint">
+            ${icon('shield', { size: 14, color: 'var(--text-subtle)' })} No spam. We reply within one business day.
+          </p>
+        </div>
+      </div>`;
+
+    // wiring
+    root.querySelectorAll('.date-chip').forEach((chip) => {
+      const i = Number(chip.dataset.date);
+      if (state.date && dates[i].getTime() === state.date.getTime()) chip.classList.add('is-sel');
+      chip.addEventListener('click', () => { state.date = dates[i]; renderForm(); });
+    });
+    root.querySelectorAll('.time-slot').forEach((slot) => {
+      if (state.time === slot.dataset.time) slot.classList.add('is-sel');
+      slot.addEventListener('click', () => { state.time = slot.dataset.time; renderForm(); });
+    });
+    const nameEl = root.querySelector('input[name="name"]');
+    const emailEl = root.querySelector('input[name="email"]');
+    const phoneEl = root.querySelector('input[name="phone"]');
+    const topicEl = root.querySelector('select[name="topic"]');
+    const confirmBtn = root.querySelector('#confirm-btn');
+    const sync = () => { confirmBtn.disabled = !isValid(); };
+    nameEl.addEventListener('input', (e) => { state.name = e.target.value; sync(); });
+    emailEl.addEventListener('input', (e) => { state.email = e.target.value; sync(); });
+    phoneEl.addEventListener('input', (e) => { state.phone = e.target.value; sync(); });
+    topicEl.addEventListener('change', (e) => { state.topic = e.target.value; });
+    confirmBtn.addEventListener('click', () => { if (isValid()) { state.sent = true; renderSent(); } });
+  }
+
+  function renderSent() {
+    root.style.padding = "56px 22px";
+    root.innerHTML = `
+      <div class="booked">
+        <div class="booked__check">${icon('check', { size: 34, color: 'var(--azure-500)', stroke: 2.6 })}</div>
+        <h2 class="booked__title">You're booked in.</h2>
+        <p class="booked__sub">A calendar invite and confirmation are on the way to <strong>${state.email}</strong>.</p>
+        <div class="booked__info">
+          ${icon('calendar', { size: 26, color: 'var(--azure-600)' })}
+          <div>
+            <div class="booked__info-date">${WD[state.date.getDay()]}, ${state.date.getDate()} ${MO[state.date.getMonth()]}</div>
+            <div class="booked__info-time">${fmtTime(state.time)} · 30 min · Google Meet</div>
+          </div>
+        </div>
+        <button class="booked__again" id="book-again">Book another time</button>
+      </div>`;
+    root.querySelector('#book-again').addEventListener('click', () => {
+      state.sent = false; state.date = null; state.time = null; renderForm();
+    });
+  }
+
+  renderForm();
+})();
+
+/* ============================================================
+   Sticky CTA — shows after scrolling past the hero, hides near booking
+   ============================================================ */
+(function stickyCTA() {
+  const cta = document.getElementById('sticky-cta');
+  function onScroll() {
+    const book = document.getElementById('book');
+    const bookTop = book ? book.getBoundingClientRect().top : Infinity;
+    const show = window.scrollY > 360 && bookTop > window.innerHeight * 0.6;
+    cta.classList.toggle('is-shown', show);
+  }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+// Hydrate static-markup icons last (after dynamic sections rendered their own).
+hydrateIcons();
+</script>
+</body>
+</html>

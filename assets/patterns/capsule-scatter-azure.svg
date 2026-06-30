@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600" fill="none">
+  
+  <defs>
+    <g id="cap-s"><rect x="-9" y="-26" width="18" height="52" rx="9"></rect></g>
+    <g id="cap-m"><rect x="-9" y="-40" width="18" height="80" rx="9"></rect></g>
+    <g id="cap-l"><rect x="-9" y="-58" width="18" height="116" rx="9"></rect></g>
+  </defs>
+  <g transform="rotate(-32 300 300)">
+    
+    <use href="#cap-l" x="70" y="120" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="108" y="150" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="146" y="120" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="184" y="150" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="222" y="120" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="260" y="150" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="298" y="120" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="336" y="150" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="374" y="120" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="412" y="150" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="450" y="120" fill="#7fc9ec"></use>
+    
+    <use href="#cap-m" x="70" y="290" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="108" y="320" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="146" y="290" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="184" y="320" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="222" y="290" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="260" y="320" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="298" y="290" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="336" y="320" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="374" y="290" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="412" y="320" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="450" y="290" fill="#7fc9ec"></use>
+    
+    <use href="#cap-l" x="70" y="460" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="108" y="490" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="146" y="460" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="184" y="490" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="222" y="460" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="260" y="490" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="298" y="460" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="336" y="490" fill="#7fc9ec"></use>
+    <use href="#cap-s" x="374" y="460" fill="#7fc9ec"></use>
+    <use href="#cap-m" x="412" y="490" fill="#7fc9ec"></use>
+    <use href="#cap-l" x="450" y="460" fill="#7fc9ec"></use>
+  </g>
+</svg>

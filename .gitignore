@@ -1,0 +1,10 @@
+# Local, machine-specific Claude Code settings
+.claude/settings.local.json
+
+# Local preview tooling (machine-specific absolute paths)
+.claude/launch.json
+.claude/static-server.js
+
+# Cloudflare Pages deploy artifacts
+public/
+.wrangler/
