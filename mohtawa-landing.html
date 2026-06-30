@@ -369,18 +369,84 @@
     .site-header__nav a { font-size: 15px; font-weight: 600; color: var(--text-muted); }
     .site-header__nav a:hover { color: var(--azure-600); }
 
-    /* center content of the simple bands (hero/testimonials/booking/footer
-       are handled in their own tasks) */
+    /* center content of the simple bands */
     .logos, .services, .why, .faq {
       padding-left: var(--pad-x); padding-right: var(--pad-x);
     }
 
     /* sticky bottom CTA is a mobile-only pattern */
     .sticky-cta { display: none; }
+
+    /* hero — tablet: centered band, larger type, wider photo */
+    .hero { padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .hero__copy { padding-left: 0; padding-right: 0; padding-top: 48px; }
+    .hero__title { font-size: 46px; }
+    .hero__lede { max-width: 560px; }
+    .hero__photo-wrap { padding-left: 0; padding-right: 0; }
+    .hero__photo { aspect-ratio: 16 / 9; }
+
+    /* client logos — single row of 6 */
+    .logos__grid { grid-template-columns: repeat(6, 1fr); gap: 10px; }
+
+    /* services — responsive grid (2-up tablet, fills available width) */
+    .card-stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .service-card { height: 100%; }
+
+    /* why us — 2×2 grid */
+    .why__list { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
+
+    /* testimonials — center head + rail to the container; rail becomes a grid */
+    .testimonials__head { padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .testimonials__rail {
+      padding-left: var(--pad-x); padding-right: var(--pad-x);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px; overflow-x: visible;
+    }
+    .testimonial { flex: initial; }
+
+    /* faq — center to the container, constrain reading width */
+    .faq__list { max-width: 760px; margin-left: auto; margin-right: auto; }
+
+    /* booking — center band to the container */
+    .booking { padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .booking__card { max-width: 920px; margin-left: auto; margin-right: auto; }
+
+    /* footer — center band; multi-column inner */
+    .site-footer { padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .site-footer__inner {
+      display: grid; grid-template-columns: 1fr auto; gap: 24px 48px; align-items: start;
+    }
+    .site-footer__bottom { grid-column: 1 / -1; }
   }
 
   @media (min-width: 1024px) {
     :root { --pad-x: max(22px, calc((100% - 1120px) / 2)); }
+
+    /* hero — desktop: two columns, copy left / photo right */
+    .hero__inner {
+      display: grid; grid-template-columns: 1.05fr 0.95fr;
+      gap: 48px; align-items: center; padding: 64px 0;
+    }
+    .hero__copy { padding-top: 0; }
+    .hero__title { font-size: 56px; }
+    .hero__lede { max-width: none; }
+    .hero__photo-wrap { padding: 0; }
+    .hero__photo { aspect-ratio: auto; height: 100%; min-height: 440px; }
+
+    /* services — exactly 3-up on desktop */
+    .card-stack { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+    /* why us — heading in its own left column, 2×2 grid on the right */
+    .why { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; align-items: start; }
+    .why .section-head--left { margin-bottom: 0; }
+    .why__list { gap: 26px 28px; }
+
+    /* testimonials — exactly 3-up on desktop */
+    .testimonials__rail { grid-template-columns: repeat(3, 1fr); }
+
+    /* booking — two columns: when | who */
+    .booking__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+    .booking__col--who .booking__divider { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -544,16 +610,20 @@
     <!-- ============== footer ============== -->
     <footer class="site-footer">
       <div class="site-footer__pattern" aria-hidden="true"></div>
-      <img class="site-footer__logo" src="assets/logos/mohtawa-logo-white.png" alt="Mohtawa">
-      <p class="site-footer__blurb">A digital consultancy for Gulf brands — content, design, and development advice from one accountable team.</p>
-      <div class="site-footer__contact">
-        <a href="mailto:hussain@mohtawacm.com"><i data-icon="mail" data-size="17" data-color="var(--azure-300)"></i> hussain@mohtawacm.com</a>
-        <a href="tel:+96566068182"><i data-icon="phone" data-size="17" data-color="var(--azure-300)"></i> +965 6606 8182</a>
-        <span><i data-icon="pin" data-size="17" data-color="var(--azure-300)"></i> Kuwait City, Kuwait</span>
-      </div>
-      <div class="site-footer__bottom">
-        <span>© 2026 Mohtawa Marketing</span>
-        <span>www.mohtawa.co</span>
+      <div class="site-footer__inner">
+        <div class="site-footer__brand">
+          <img class="site-footer__logo" src="assets/logos/mohtawa-logo-white.png" alt="Mohtawa">
+          <p class="site-footer__blurb">A digital consultancy for Gulf brands — content, design, and development advice from one accountable team.</p>
+        </div>
+        <div class="site-footer__contact">
+          <a href="mailto:hussain@mohtawacm.com"><i data-icon="mail" data-size="17" data-color="var(--azure-300)"></i> hussain@mohtawacm.com</a>
+          <a href="tel:+96566068182"><i data-icon="phone" data-size="17" data-color="var(--azure-300)"></i> +965 6606 8182</a>
+          <span><i data-icon="pin" data-size="17" data-color="var(--azure-300)"></i> Kuwait City, Kuwait</span>
+        </div>
+        <div class="site-footer__bottom">
+          <span>© 2026 Mohtawa Marketing</span>
+          <span>www.mohtawa.co</span>
+        </div>
       </div>
     </footer>
 
@@ -723,57 +793,63 @@ document.querySelectorAll('[data-scroll-book]').forEach((b) => b.addEventListene
         <p class="booking__lede">Pick a time that works. We'll come prepared with a first look at your opportunities.</p>
       </div>
       <div class="booking__card">
-        <div class="booking__row-label" style="margin-bottom:12px;">
-          ${icon('calendar', { size: 18, color: 'var(--azure-600)' })}
-          <span class="t">Select a day</span>
-        </div>
-        <div class="date-rail no-scrollbar">
-          ${dates.map((d, i) => `
-            <div class="date-chip" data-date="${i}">
-              <span class="wd">${WD[d.getDay()]}</span>
-              <span class="dd">${d.getDate()}</span>
-              <span class="mo">${MO[d.getMonth()]}</span>
-            </div>`).join('')}
-        </div>
-        <div class="booking__row-label" style="margin:22px 0 12px;">
-          ${icon('clock', { size: 18, color: 'var(--azure-600)' })}
-          <span class="t">Select a time</span>
-          <span class="booking__tz">GMT+3 · Kuwait</span>
-        </div>
-        <div class="time-grid">
-          ${TIMES.map((t) => `<div class="time-slot" data-time="${t}">${fmtTime(t).replace(':00', '')}</div>`).join('')}
-        </div>
-        <div class="booking__divider"></div>
-        <div class="booking__fields">
-          <label class="field">
-            <span class="field__label">Full name</span>
-            <input class="field__control" type="text" name="name" placeholder="e.g. Hussain Al-Sabah" value="${state.name}">
-          </label>
-          <label class="field">
-            <span class="field__label">Work email</span>
-            <input class="field__control" type="email" name="email" placeholder="you@company.com" value="${state.email}">
-          </label>
-          <label class="field">
-            <span class="field__label">Phone / WhatsApp</span>
-            <input class="field__control" type="tel" name="phone" placeholder="+965 ..." value="${state.phone}">
-          </label>
-          <label class="field">
-            <span class="field__label">What would you like to discuss?</span>
-            <span class="field__select-wrap">
-              <select class="field__control" name="topic">
-                ${TOPICS.map((o) => `<option value="${o}"${o === state.topic ? ' selected' : ''}>${o}</option>`).join('')}
-              </select>
-              <span class="field__chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            </span>
-          </label>
-        </div>
-        <div style="margin-top:22px;">
-          <button class="btn btn--accent btn--lg btn--pill btn--block" id="confirm-btn"${isValid() ? '' : ' disabled'}>
-            Confirm my consultation ${icon('arrow', { size: 20, color: '#fff' })}
-          </button>
-          <p class="booking__fineprint">
-            ${icon('shield', { size: 14, color: 'var(--text-subtle)' })} No spam. We reply within one business day.
-          </p>
+        <div class="booking__grid">
+          <div class="booking__col booking__col--when">
+            <div class="booking__row-label" style="margin-bottom:12px;">
+              ${icon('calendar', { size: 18, color: 'var(--azure-600)' })}
+              <span class="t">Select a day</span>
+            </div>
+            <div class="date-rail no-scrollbar">
+              ${dates.map((d, i) => `
+                <div class="date-chip" data-date="${i}">
+                  <span class="wd">${WD[d.getDay()]}</span>
+                  <span class="dd">${d.getDate()}</span>
+                  <span class="mo">${MO[d.getMonth()]}</span>
+                </div>`).join('')}
+            </div>
+            <div class="booking__row-label" style="margin:22px 0 12px;">
+              ${icon('clock', { size: 18, color: 'var(--azure-600)' })}
+              <span class="t">Select a time</span>
+              <span class="booking__tz">GMT+3 · Kuwait</span>
+            </div>
+            <div class="time-grid">
+              ${TIMES.map((t) => `<div class="time-slot" data-time="${t}">${fmtTime(t).replace(':00', '')}</div>`).join('')}
+            </div>
+          </div>
+          <div class="booking__col booking__col--who">
+            <div class="booking__divider"></div>
+            <div class="booking__fields">
+              <label class="field">
+                <span class="field__label">Full name</span>
+                <input class="field__control" type="text" name="name" placeholder="e.g. Hussain Al-Sabah" value="${state.name}">
+              </label>
+              <label class="field">
+                <span class="field__label">Work email</span>
+                <input class="field__control" type="email" name="email" placeholder="you@company.com" value="${state.email}">
+              </label>
+              <label class="field">
+                <span class="field__label">Phone / WhatsApp</span>
+                <input class="field__control" type="tel" name="phone" placeholder="+965 ..." value="${state.phone}">
+              </label>
+              <label class="field">
+                <span class="field__label">What would you like to discuss?</span>
+                <span class="field__select-wrap">
+                  <select class="field__control" name="topic">
+                    ${TOPICS.map((o) => `<option value="${o}"${o === state.topic ? ' selected' : ''}>${o}</option>`).join('')}
+                  </select>
+                  <span class="field__chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </span>
+              </label>
+            </div>
+            <div style="margin-top:22px;">
+              <button class="btn btn--accent btn--lg btn--pill btn--block" id="confirm-btn"${isValid() ? '' : ' disabled'}>
+                Confirm my consultation ${icon('arrow', { size: 20, color: '#fff' })}
+              </button>
+              <p class="booking__fineprint">
+                ${icon('shield', { size: 14, color: 'var(--text-subtle)' })} No spam. We reply within one business day.
+              </p>
+            </div>
+          </div>
         </div>
       </div>`;
 
