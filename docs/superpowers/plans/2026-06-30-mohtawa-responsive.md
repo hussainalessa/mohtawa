@@ -25,9 +25,9 @@
 
 ## Preview / verification setup
 
-The repo has a dev server config `machla-static` (serves `public/` on port 4321).
+The repo has a dev server config `mohtawa-static` (serves `public/` on port 4321).
 
-- Start once: `preview_start { name: "machla-static" }` → returns `serverId`. Reuse that `serverId` for all `preview_eval` / `preview_resize` calls below.
+- Start once: `preview_start { name: "mohtawa-static" }` → returns `serverId`. Reuse that `serverId` for all `preview_eval` / `preview_resize` calls below.
 - The page URL is `http://localhost:4321/mohtawa-landing.html`.
 - **Sync command** (run after each edit, before previewing):
   ```bash
@@ -128,7 +128,7 @@ Run:
 ```bash
 cp "mohtawa-landing.html" public/mohtawa-landing.html
 ```
-Then `preview_start { name: "machla-static" }` (note the `serverId`) and
+Then `preview_start { name: "mohtawa-static" }` (note the `serverId`) and
 `preview_eval { serverId, expression: "location.href='http://localhost:4321/mohtawa-landing.html'" }`.
 
 - [ ] **Step 4: Verify desktop (1280px)**
